@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import Combine
 
 struct Case: Decodable, Identifiable {
     let id = UUID()
@@ -44,20 +43,11 @@ struct Details: Decodable, Identifiable {
     var todayCases: Double?
 }
 
-//struct Stats: Decodable, Identifiable {
-//    let id = UUID()
-//    var country: String
-//    var casesPerOneMillion: Double
-//    var deathsPerOneMillion: Double
-//    var todayCases: Double
-//}
-
 struct ContentView: View {
 //    @ObservedObject var data = getData()
     @State var posts = Case()
     @State var details: [Details] = []
-//    @State var stats: [Stats] = []
-    @State var statsOn = true
+    @State var statsOn = false
     
     var body: some View {
         VStack {
@@ -90,27 +80,66 @@ struct ContentView: View {
             
             HStack {
                 if !self.statsOn {
-                    Text("cases   deaths  recovered  critical")
-                        .background(Color.green)
+                    HStack {
+                        Text("Country")
+                        .frame(width: 100)
+
+                        Text("cases")
+                        .frame(width: 60)
+
+                        Text("deaths")
+                        .frame(width: 60)
+
+                        Text("recovered")
+                        .frame(width: 60)
+
+                        Text("critical")
+                        .frame(width: 60)
+
+                    }
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    
                 } else {
-                    Text("cases/M  death/M  Today cases")
+                    HStack {
+                        Text("Country")
+                        .frame(width: 100)
+
+                        Text("cases/M")
+                        .frame(width: 60)
+
+                        Text("death/M ")
+                        .frame(width: 60)
+
+                        Text("Today cases")
+                        .frame(width: 60)
+                    }
                     .background(Color.yellow)
+                    .foregroundColor(.white)
                 }
             }
                 
             List(details) { detail in
                 HStack {
                     Text(detail.country)
+                    .frame(width: 100)
                     if !self.statsOn {
                         Text("\(getValue(data: detail.cases))")
+                        .frame(width: 60)
                         Text("\(getValue(data: detail.deaths))")
+                            .frame(width: 60)
                             .foregroundColor(.red)
                         Text("\(getValue(data: detail.recovered))")
+                        .frame(width: 60)
                         Text("\(getValue(data: detail.critical))")
+                        .frame(width: 60)
                     } else {
                         Text("\(getValue(data: detail.casesPerOneMillion ?? 0 ))")
+                            .frame(width: 60)
                         Text("\(getValue(data: detail.deathsPerOneMillion ?? 0))")
+                        .frame(width: 60)
                         Text("\(getValue(data: detail.todayCases ?? 0))")
+                            .frame(width: 60)
                             .foregroundColor(.pink)
                     }
                 }
