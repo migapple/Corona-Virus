@@ -164,10 +164,19 @@ struct ContentView: View {
             // Listes
                 List(self.details) { detail in
                     HStack {
-                        Text(detail.country)
+                        
+                        if detail.country == "France" {
+                            Text(detail.country)
                             .font(.system(size: 12))
                             .fontWeight(.bold)
                             .frame(width: geo.size.width / 5 + 12 )
+                            .background(Color(.red))
+                        } else {
+                            Text(detail.country)
+                            .font(.system(size: 12))
+                            .fontWeight(.bold)
+                            .frame(width: geo.size.width / 5 + 12 )
+                        }
                         
                         if !self.statsOn {
                             Text("\(getValue(data: detail.cases))")
