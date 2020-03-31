@@ -13,6 +13,7 @@
 		534F3EFC2431C1AD007240AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 534F3EFB2431C1AD007240AC /* Assets.xcassets */; };
 		534F3EFF2431C1AD007240AC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 534F3EFE2431C1AD007240AC /* Preview Assets.xcassets */; };
 		534F3F022431C1AD007240AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 534F3F002431C1AD007240AC /* LaunchScreen.storyboard */; };
+		539939FE2433808E00F58644 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539939FD2433808E00F58644 /* SearchView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		534F3EFE2431C1AD007240AC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		534F3F012431C1AD007240AC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		534F3F032431C1AD007240AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		539939FD2433808E00F58644 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				534F3EF52431C1AB007240AC /* AppDelegate.swift */,
 				534F3EF72431C1AB007240AC /* SceneDelegate.swift */,
 				534F3EF92431C1AB007240AC /* ContentView.swift */,
+				539939FD2433808E00F58644 /* SearchView.swift */,
 				534F3EFB2431C1AD007240AC /* Assets.xcassets */,
 				534F3F002431C1AD007240AC /* LaunchScreen.storyboard */,
 				534F3F032431C1AD007240AC /* Info.plist */,
@@ -146,6 +149,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				539939FE2433808E00F58644 /* SearchView.swift in Sources */,
 				534F3EF62431C1AB007240AC /* AppDelegate.swift in Sources */,
 				534F3EF82431C1AB007240AC /* SceneDelegate.swift in Sources */,
 				534F3EFA2431C1AB007240AC /* ContentView.swift in Sources */,

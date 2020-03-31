@@ -22,7 +22,7 @@ struct Case: Decodable, Identifiable {
         updated: Double = 0,
         recovered: Double = 0,
         active: Double = 0) {
-
+        
         self.cases = cases
         self.deaths = deaths
         self.updated = updated
@@ -45,67 +45,81 @@ struct Details: Decodable, Identifiable {
 }
 
 struct ContentView: View {
-//    @ObservedObject var data = getData()
     @State var posts = Case()
     @State var details: [Details] = []
     @State var statsOn = false
+    @State var txt: String = ""
     
     var body: some View {
+        GeometryReader { geo in
         VStack {
+            
+            // Titre
+            Text("COVID 19")
+                .fontWeight(.black)
             HStack {
-                Text("Covid 19")
-                    .font(.largeTitle)
-                    .padding()
-                
-                Toggle(isOn: $statsOn) {
+                Toggle(isOn: self.$statsOn) {
                     Text("Statistiques")
                 }
             }
+            
+            //            SearchView()
+            
+            // Cas Mondiaux
             VStack {
-                Text("Cases: \(getValue(data: posts.cases))")
-                Text("Actives: \(getValue(data: posts.active))")
-                Text("Death: \(getValue(data: posts.deaths))")
-                Text("Recovered: \(getValue(data: posts.recovered))")
-                Text("Updated: \(getDate(time: posts.updated))")
+                Text("Cases: \(getValue(data: self.posts.cases))")
+                Text("Actives: \(getValue(data: self.posts.active))")
+                Text("Death: \(getValue(data: self.posts.deaths))")
+                Text("Recovered: \(getValue(data: self.posts.recovered))")
+                Text("Updated: \(getDate(time: self.posts.updated))")
                     .font(.footnote)
                     .foregroundColor(.white)
             }
             .background(Color.red)
-        .padding()
+            .padding()
                 
-            .onAppear() {
-                GetData().updateData { (posts) in
-                    self.posts = posts
-                }
+                // Récupération des données
+                .onAppear() {
+                    GetData().updateData { (posts) in
+                        self.posts = posts
+                    }
             }
+            
+            // Titres
             
             HStack {
                 if !self.statsOn {
                     HStack {
                         Text("Country")
-                        .frame(width: 124)
+                            
                             .font(.system(size: 12))
-
+                            .fontWeight(.medium)
+                            .frame(width: geo.size.width / 5)
+                         .padding(.horizontal, 0)
+                        
                         Text("cases")
-                        .frame(width: 60)
-                        .font(.system(size: 12))
-
-
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .frame(width: geo.size.width / 5)
+                         .padding(.horizontal, -5)
+                        
                         Text("deaths")
-                        .frame(width: 60)
-                        .font(.system(size: 12))
-
-
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .frame(width: geo.size.width / 5)
+                         .padding(.horizontal, -5)
+                        
                         Text("recovered")
-                        .frame(width: 60)
-                        .font(.system(size: 12))
-
-
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .frame(width: geo.size.width / 5)
+                         .padding(.horizontal, -5)
+                        
                         Text("critical")
-                        .frame(width: 60)
-                        .font(.system(size: 12))
-
-
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .frame(width: geo.size.width / 5)
+                         .padding(.horizontal, -5)
                     }
                     .background(Color.green)
                     .foregroundColor(.white)
@@ -113,105 +127,112 @@ struct ContentView: View {
                 } else {
                     HStack {
                         Text("Country")
-                        .frame(width: 124)
-                        .font(.system(size: 12))
-
-
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .frame(width: geo.size.width / 5)
+                        .padding(.horizontal, -5)
+                        
                         Text("cases/M")
-                        .frame(width: 60)
-                        .font(.system(size: 12))
-
-
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .frame(width: geo.size.width / 5)
+                        .padding(.horizontal, -5)
+                        
                         Text("death/M ")
-                        .frame(width: 60)
-                        .font(.system(size: 12))
-
-
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .frame(width: geo.size.width / 5)
+                        .padding(.horizontal, -5)
+                        
                         Text("Today cases")
-                        .frame(width: 60)
-                        .font(.system(size: 12))
-
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .frame(width: geo.size.width / 5)
+                        .padding(.horizontal, -5)
                         
                         Text("Today deaths")
-                        .frame(width: 60)
-                        .font(.system(size: 12))
-
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .frame(width: geo.size.width / 5)
+                        .padding(.horizontal, -5)
                     }
                     .background(Color.yellow)
                     .foregroundColor(.white)
                 }
-            }.padding(.leading, -20)
-                
-            List(details) { detail in
-                HStack {
-                    Text(detail.country)
-                        .font(.system(size: 12))
-                        .fontWeight(.bold)
-                    .frame(width: 100)
-                    if !self.statsOn {
-                        Text("\(getValue(data: detail.cases))")
+            }.padding(.leading, 0)
+            
+            // Listes
+                List(self.details) { detail in
+                    HStack {
+                        Text(detail.country)
                             .font(.system(size: 12))
-
-                            .frame(width: 60)
+                            .fontWeight(.bold)
+                            .frame(width: geo.size.width / 5 + 12 )
                         
-                        Text("\(getValue(data: detail.deaths))")
-                            .font(.system(size: 12))
-
-                            .frame(width: 60)
-                            .foregroundColor(.red)
-                        Text("\(getValue(data: detail.recovered))")
-                            .font(.system(size: 12))
-
-                            .frame(width: 60)
-                        Text("\(getValue(data: detail.critical))")
-                            .font(.system(size: 12))
-
-                            .frame(width: 60)
-                    } else {
-                        Text("\(getValue(data: detail.casesPerOneMillion ?? 0 ))")
-                            .font(.system(size: 12))
-
-                            .frame(width: 60)
-                        Text("\(getValue(data: detail.deathsPerOneMillion ?? 0))")
-                            .font(.system(size: 12))
-
-                            .frame(width: 60)
-                        Text("\(getValue(data: detail.todayCases ?? 0))")
-                            .font(.system(size: 12))
-
-                            .frame(width: 60)
+                        if !self.statsOn {
+                            Text("\(getValue(data: detail.cases))")
+                                .font(.system(size: 12))
+                                .fontWeight(.medium)
+                                .frame(width: geo.size.width / 5)
+                                .padding(.horizontal, -10)
+                            
+                            Text("\(getValue(data: detail.deaths))")
+                                .font(.system(size: 12))
+                                .fontWeight(.medium)
+                                .frame(width: geo.size.width / 5)
+                                .foregroundColor(.red)
+                                .padding(.horizontal, -10)
+                            
+                            Text("\(getValue(data: detail.recovered))")
+                                .font(.system(size: 12))
+                                .fontWeight(.medium)
+                                .frame(width: geo.size.width / 5)
+                            Text("\(getValue(data: detail.critical))")
+                                .font(.system(size: 12))
+                                .frame(width: geo.size.width / 5)
+                                .padding(.horizontal, -10)
+                        } else {
+                            Text("\(getValue(data: detail.casesPerOneMillion ?? 0 ))")
+                                .font(.system(size: 12))
+                                .fontWeight(.medium)
+                                .frame(width: geo.size.width / 5)
+                                .padding(.horizontal, -10)
+                            Text("\(getValue(data: detail.deathsPerOneMillion ?? 0))")
+                                .font(.system(size: 12))
+                                .fontWeight(.medium)
+                                .frame(width: geo.size.width / 5)
+                                .padding(.horizontal, -10)
+                            Text("\(getValue(data: detail.todayCases ?? 0))")
+                                .font(.system(size: 12))
+                                .fontWeight(.medium)
+                                .frame(width: geo.size.width / 5)
+                                .padding(.horizontal, -10)
                             Text("\(getValue(data: detail.todayDeaths ?? 0))")
                                 .font(.system(size: 12))
-
-                            .frame(width: 60)
-                            .foregroundColor(.pink)
+                                .fontWeight(.medium)
+                                .frame(width: geo.size.width / 5)
+                                .foregroundColor(.pink)
+                                .padding(.horizontal, -10)
+                        }
                     }
                 }
-            }
-            .onAppear() {
-                GetData().updateData2 { (details) in
-                    self.details = details
+                .onAppear() {
+                    GetData().updateData2 { (details) in
+                        self.details = details
+                    }
                 }
+                .padding(.horizontal, 0)
             }
-            .padding(.horizontal, -18)
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView().previewDevice("iPhone X")
     }
 }
 
-
-//class getData: ObservableObject {
-//    @Published var casMondiaux: Case!
-//    @Published var countries = [Details]()
-//
-//    init() {
-//        updateData()
-//    }
 class GetData {
     
     // Global
@@ -219,39 +240,24 @@ class GetData {
         let url = "https://corona.lmao.ninja/all"
         
         let session = URLSession(configuration: .default)
-
+        
         session.dataTask(with: URL(string: url)!) { (data, _, err) in
             
             guard let data = data else {
-//                print("No Data")
-            return }
+                //                print("No Data")
+                return }
             
             if err != nil {
                 print((err?.localizedDescription)!)
                 return
             }
-
+            
             let posts = try! JSONDecoder().decode(Case.self, from: data)
-//            print(posts)
+            //            print(posts)
             DispatchQueue.main.async {
                 completion(posts)
             }
         }.resume()
-        
-//        for i in country {
-//            session1.dataTask(with: URL(string: url1+i)!) { (data, _, err) in
-//                if err != nil {
-//                    print((err?.localizedDescription)!)
-//                    return
-//                }
-//
-//                let json = try! JSONDecoder().decode(Details.self, from: data!)
-//
-//                DispatchQueue.main.async {
-//                    self.countries.append(json)
-//                }
-//            }.resume()
-//        }
     }
     
     // Detail
@@ -272,7 +278,7 @@ class GetData {
             }
             
             let details = try! JSONDecoder().decode([Details].self, from: data)
-//            print(details)
+
             DispatchQueue.main.async {
                 completion(details)
             }
