@@ -41,6 +41,7 @@ struct Details: Decodable, Identifiable {
     var casesPerOneMillion: Double?
     var deathsPerOneMillion: Double?
     var todayCases: Double?
+    var todayDeaths: Double?
 }
 
 struct ContentView: View {
@@ -82,19 +83,28 @@ struct ContentView: View {
                 if !self.statsOn {
                     HStack {
                         Text("Country")
-                        .frame(width: 100)
+                        .frame(width: 124)
+                            .font(.system(size: 12))
 
                         Text("cases")
                         .frame(width: 60)
+                        .font(.system(size: 12))
+
 
                         Text("deaths")
                         .frame(width: 60)
+                        .font(.system(size: 12))
+
 
                         Text("recovered")
                         .frame(width: 60)
+                        .font(.system(size: 12))
+
 
                         Text("critical")
                         .frame(width: 60)
+                        .font(.system(size: 12))
+
 
                     }
                     .background(Color.green)
@@ -103,51 +113,87 @@ struct ContentView: View {
                 } else {
                     HStack {
                         Text("Country")
-                        .frame(width: 100)
+                        .frame(width: 124)
+                        .font(.system(size: 12))
+
 
                         Text("cases/M")
                         .frame(width: 60)
+                        .font(.system(size: 12))
+
 
                         Text("death/M ")
                         .frame(width: 60)
+                        .font(.system(size: 12))
+
 
                         Text("Today cases")
                         .frame(width: 60)
+                        .font(.system(size: 12))
+
+                        
+                        Text("Today deaths")
+                        .frame(width: 60)
+                        .font(.system(size: 12))
+
                     }
                     .background(Color.yellow)
                     .foregroundColor(.white)
                 }
-            }
+            }.padding(.leading, -20)
                 
             List(details) { detail in
                 HStack {
                     Text(detail.country)
+                        .font(.system(size: 12))
+                        .fontWeight(.bold)
                     .frame(width: 100)
                     if !self.statsOn {
                         Text("\(getValue(data: detail.cases))")
-                        .frame(width: 60)
+                            .font(.system(size: 12))
+
+                            .frame(width: 60)
+                        
                         Text("\(getValue(data: detail.deaths))")
+                            .font(.system(size: 12))
+
                             .frame(width: 60)
                             .foregroundColor(.red)
                         Text("\(getValue(data: detail.recovered))")
-                        .frame(width: 60)
+                            .font(.system(size: 12))
+
+                            .frame(width: 60)
                         Text("\(getValue(data: detail.critical))")
-                        .frame(width: 60)
+                            .font(.system(size: 12))
+
+                            .frame(width: 60)
                     } else {
                         Text("\(getValue(data: detail.casesPerOneMillion ?? 0 ))")
+                            .font(.system(size: 12))
+
                             .frame(width: 60)
                         Text("\(getValue(data: detail.deathsPerOneMillion ?? 0))")
-                        .frame(width: 60)
+                            .font(.system(size: 12))
+
+                            .frame(width: 60)
                         Text("\(getValue(data: detail.todayCases ?? 0))")
+                            .font(.system(size: 12))
+
+                            .frame(width: 60)
+                            Text("\(getValue(data: detail.todayDeaths ?? 0))")
+                                .font(.system(size: 12))
+
                             .frame(width: 60)
                             .foregroundColor(.pink)
                     }
                 }
-            }.onAppear() {
+            }
+            .onAppear() {
                 GetData().updateData2 { (details) in
                     self.details = details
                 }
             }
+            .padding(.horizontal, -18)
         }
     }
 }
@@ -177,7 +223,7 @@ class GetData {
         session.dataTask(with: URL(string: url)!) { (data, _, err) in
             
             guard let data = data else {
-                print("No Data")
+//                print("No Data")
             return }
             
             if err != nil {
@@ -226,7 +272,7 @@ class GetData {
             }
             
             let details = try! JSONDecoder().decode([Details].self, from: data)
-            print(details)
+//            print(details)
             DispatchQueue.main.async {
                 completion(details)
             }
