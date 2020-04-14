@@ -61,11 +61,11 @@ struct ContentView: View {
                     .fontWeight(.black)
                 HStack {
                     Toggle(isOn: self.$alphaSort) {
-                        Text("Tri alphabetique")
+                        Text("alphanumeric")
                     }
                     
                     Toggle(isOn: self.$statsOn) {
-                        Text("Statistiques")
+                        Text("statistics")
                     }
                 }
                 
@@ -73,11 +73,11 @@ struct ContentView: View {
                 
                 // Cas Mondiaux
                 VStack {
-                    Text("Cases: \(getValue(data: self.posts.cases))")
-                    Text("Actives: \(getValue(data: self.posts.active))")
-                    Text("Death: \(getValue(data: self.posts.deaths))")
-                    Text("Recovered: \(getValue(data: self.posts.recovered))")
-                    Text("Updated: \(getDate(time: self.posts.updated))")
+                    Text("cases: \(getValue(data: self.posts.cases))")
+                    Text("actives: \(getValue(data: self.posts.active))")
+                    Text("deaths: \(getValue(data: self.posts.deaths))")
+                    Text("recovered: \(getValue(data: self.posts.recovered))")
+                    Text("updated: \(getDate(time: self.posts.updated))")
                         .font(.footnote)
                         .foregroundColor(.white)
                 }
@@ -96,7 +96,7 @@ struct ContentView: View {
                 HStack {
                     if !self.statsOn {
                         HStack {
-                            Text("Country")
+                            Text("country")
                                 
                                 .font(.system(size: 12))
                                 .fontWeight(.medium)
@@ -132,7 +132,7 @@ struct ContentView: View {
                         
                     } else {
                         HStack {
-                            Text("Country")
+                            Text("country")
                                 .font(.system(size: 12))
                                 .fontWeight(.medium)
                                 .frame(width: geo.size.width / 5)
@@ -144,19 +144,19 @@ struct ContentView: View {
                                 .frame(width: geo.size.width / 5)
                                 .padding(.horizontal, -5)
                             
-                            Text("death/M ")
+                            Text("death/M")
                                 .font(.system(size: 12))
                                 .fontWeight(.medium)
                                 .frame(width: geo.size.width / 5)
                                 .padding(.horizontal, -5)
                             
-                            Text("Today cases")
+                            Text("today cases")
                                 .font(.system(size: 12))
                                 .fontWeight(.medium)
                                 .frame(width: geo.size.width / 5)
                                 .padding(.horizontal, -5)
                             
-                            Text("Today deaths")
+                            Text("today deaths")
                                 .font(.system(size: 12))
                                 .fontWeight(.medium)
                                 .frame(width: geo.size.width / 5)
@@ -319,7 +319,11 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().previewDevice("iPhone X")
+        ForEach(["en", "fr"], id: \.self) { localeIdentifier in
+            ContentView()
+            .environment(\.locale, .init(identifier: localeIdentifier))
+            .previewDisplayName(localeIdentifier)
+        }
     }
 }
 
@@ -334,7 +338,6 @@ class GetData {
         session.dataTask(with: URL(string: url)!) { (data, _, err) in
             
             guard let data = data else {
-                //                print("No Data")
                 return }
             
             if err != nil {
@@ -343,7 +346,6 @@ class GetData {
             }
             
             let posts = try! JSONDecoder().decode(Case.self, from: data)
-            //            print(posts)
             DispatchQueue.main.async {
                 completion(posts)
             }

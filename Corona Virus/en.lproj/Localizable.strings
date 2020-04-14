@@ -1,0 +1,27 @@
+/* 
+  Localizable.strings
+  Corona Virus
+
+  Created by Michel Garlandat on 14/04/2020.
+  Copyright © 2020 Michel Garlandat. All rights reserved.
+*/
+
+"activeCases" = "Active Cases";
+"deaths" = "Deaths";
+"recovered" = "Recovered";
+"critical" = "Critical";
+"alphanumeric" = "Alphanumeric";
+"statistics" = "Statistics";
+
+"country" = "Country";
+"cases: %@" = "Cases: %@";
+"cases" = "Cases";
+"actives: %@" = "Actives: %@";
+"deaths: %@" = "Deaths: %@";
+"recovered: %@" = "Recovered: %@";
+"updated: %@" = "Updated: %@";
+
+"cases/M" = "Cases/M";
+"death/M" = "Death/M";
+"today cases" = "Today cases";
+"today deaths" = "Today deaths";
