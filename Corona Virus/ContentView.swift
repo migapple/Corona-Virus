@@ -41,7 +41,7 @@ struct HomeView: View {
                         if self.showSearchBar {
                             Image(systemName: "magnifyingglass")
                                 .padding(.horizontal, 8)
-                            TextField("Search Country", text: self.$searchText)
+                            TextField("searchCountry", text: self.$searchText)
                             Button(action: {
                                 withAnimation {
                                     self.searchText = ""
@@ -125,7 +125,8 @@ struct HomeView: View {
                         .padding(.horizontal, 0)
                     } else {
                         if self.searchText != "" {
-                            List(self.details.filter({$0.country.contains(self.searchText.lowercased())})) { detail in
+                            Text(self.searchText)
+                            List(self.details.filter({$0.country.contains(self.searchText)})) { detail in
                                 ListView(statsOn: self.$statsOn, detail: detail)
                             }
                         } else {

@@ -26,3 +26,6 @@
 "death/M" = "Morts/M";
 "today cases" = "Cas Actuels";
 "today deaths" = "Morts Actuelles";
+
+"searchCountry" = "Recherche d'un pays";
+
