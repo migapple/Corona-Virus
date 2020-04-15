@@ -20,56 +20,13 @@ struct HomeView: View {
     @State var sortedDetails: [Details] = []
     @State var statsOn = false
     @State var alphaSort = false
-    @State var showSearchBar = false
+   
     @State var searchText: String = ""
     
     var body: some View {
         GeometryReader { geo in
             VStack(spacing: 0) {
-                HStack {
-                    if !self.showSearchBar {
-                        Text("COVID 19")
-                            .fontWeight(.bold)
-                            .font(.title)
-                            .foregroundColor(.white)
-                    }
-                    
-                    Spacer(minLength: 0)
-                    
-                    // Bar de recherche
-                    HStack {
-                        if self.showSearchBar {
-                            Image(systemName: "magnifyingglass")
-                                .padding(.horizontal, 8)
-                            TextField("searchCountry", text: self.$searchText)
-                            Button(action: {
-                                withAnimation {
-                                    self.searchText = ""
-                                    self.showSearchBar.toggle()
-                                }
-                            }) {
-                                Image(systemName: "xmark").foregroundColor(.black)
-                            }
-                            .padding(.horizontal, 8)
-                        }
-                        else{
-                            Button(action: {
-                                withAnimation {
-                                    self.showSearchBar.toggle()
-                                }
-                            }) {
-                                Image(systemName: "magnifyingglass").foregroundColor(.black).padding(10)
-                            }
-                        }
-                    }
-                    .padding(self.showSearchBar ? 10 : 0)
-                    .background(Color.white)
-                    .cornerRadius(20)
-                }
-                .padding(.top, (UIApplication.shared.windows.first?.safeAreaInsets.top)! + 0)
-                .padding(.horizontal)
-                .padding(.bottom, 10)
-                .background(Color.orange)
+                SearchBarView(searchText: self.$searchText)
                 
                 // Toggle
                 HStack {
@@ -157,84 +114,6 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-class GetData {
-    // Global
-    func updateData(completion: @escaping (Case) -> ()) {
-        let url = "https://corona.lmao.ninja/all"
-        
-        let session = URLSession(configuration: .default)
-        
-        session.dataTask(with: URL(string: url)!) { (data, _, err) in
-            
-            guard let data = data else {
-                return }
-            
-            if err != nil {
-                print((err?.localizedDescription)!)
-                return
-            }
-            
-            let posts = try! JSONDecoder().decode(Case.self, from: data)
-            DispatchQueue.main.async {
-                completion(posts)
-            }
-        }.resume()
-    }
-    
-    // Detail
-    func updateData2(completion: @escaping ([Details]) -> ()) {
-        let url = "https://corona.lmao.ninja/countries"
-        
-        let session = URLSession(configuration: .default)
-        
-        session.dataTask(with: URL(string: url)!) { (data, _, err) in
-            
-            guard let data = data else {
-                print("No Data")
-                return }
-            
-            if err != nil {
-                print((err?.localizedDescription)!)
-                return
-            }
-            
-            let details = try! JSONDecoder().decode([Details].self, from: data)
-            
-            let sortedDetails = details.sorted {
-                $0.cases > $1.cases
-            }
-            
-            DispatchQueue.main.async {
-                completion(sortedDetails)
-            }
-            
-        }.resume()
-    }
-    
-    func updateData3(completion: @escaping ([Details]) -> ()) {
-        let url = "https://corona.lmao.ninja/countries"
-        let session = URLSession(configuration: .default)
-        
-        session.dataTask(with: URL(string: url)!) { (data, _, err) in
-            
-            guard let data = data else {
-                print("No Data")
-                return }
-            
-            if err != nil {
-                print((err?.localizedDescription)!)
-                return
-            }
-            
-            let details = try! JSONDecoder().decode([Details].self, from: data)
-            
-            DispatchQueue.main.async {
-                completion(details)
-            }
-        }.resume()
-    }
-}
-
 // MARK: - Permet de changer la barre de demarrage
 class Host: UIHostingController<ContentView> {
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -242,15 +121,10 @@ class Host: UIHostingController<ContentView> {
     }
 }
 
-func getDate(time: Double) -> String {
-    let date = Double(time / 1000)
-    let format = DateFormatter()
-    format.dateFormat = "MMM - dd - YYYY hh:mm a"
-    return format.string(from: Date(timeIntervalSince1970: TimeInterval(exactly: date)!))
-}
 
-func getValue(data: Double) -> String {
-    let format = NumberFormatter()
-    format.numberStyle = .decimal
-    return format.string(for: data)!
+// MARK: - Extension for fermer le clavier
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
 }
