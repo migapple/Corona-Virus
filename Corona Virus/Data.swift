@@ -61,7 +61,7 @@ func getValue(data: Double) -> String {
 class GetData {
     // Global
     func updateData(completion: @escaping (Case) -> ()) {
-        let url = "https://corona.lmao.ninja/all"
+        let url = "https://corona.lmao.ninja/v2/all"
         
         let session = URLSession(configuration: .default)
         
@@ -75,16 +75,20 @@ class GetData {
                 return
             }
             
-            let posts = try! JSONDecoder().decode(Case.self, from: data)
-            DispatchQueue.main.async {
-                completion(posts)
+            do {
+                let posts = try JSONDecoder().decode(Case.self, from: data)
+                DispatchQueue.main.async {
+                    completion(posts)
+                }
+            } catch {
+                print(error.localizedDescription)
             }
         }.resume()
     }
     
     // Detail
     func updateData2(completion: @escaping ([Details]) -> ()) {
-        let url = "https://corona.lmao.ninja/countries"
+        let url = "https://corona.lmao.ninja/v2/countries"
         
         let session = URLSession(configuration: .default)
         
@@ -99,21 +103,23 @@ class GetData {
                 return
             }
             
-            let details = try! JSONDecoder().decode([Details].self, from: data)
-            
-            let sortedDetails = details.sorted {
-                $0.cases > $1.cases
-            }
-            
-            DispatchQueue.main.async {
-                completion(sortedDetails)
+            do {
+                let details = try JSONDecoder().decode([Details].self, from: data)
+                let sortedDetails = details.sorted {
+                    $0.cases > $1.cases
+                }
+                DispatchQueue.main.async {
+                    completion(sortedDetails)
+                }
+            } catch {
+                print(error.localizedDescription)
             }
             
         }.resume()
     }
     
     func updateData3(completion: @escaping ([Details]) -> ()) {
-        let url = "https://corona.lmao.ninja/countries"
+        let url = "https://corona.lmao.ninja/v2/countries"
         let session = URLSession(configuration: .default)
         
         session.dataTask(with: URL(string: url)!) { (data, _, err) in
@@ -127,11 +133,17 @@ class GetData {
                 return
             }
             
-            let details = try! JSONDecoder().decode([Details].self, from: data)
-            
-            DispatchQueue.main.async {
-                completion(details)
+            do {
+                let details = try JSONDecoder().decode([Details].self, from: data)
+                
+                DispatchQueue.main.async {
+                    completion(details)
+                }
             }
+            catch {
+                print(error.localizedDescription)
+            }
+            
         }.resume()
     }
 }
